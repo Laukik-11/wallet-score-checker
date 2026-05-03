@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { Loader2, ShieldCheck, Sparkles } from 'lucide-react';
 import { fetchWalletScore, type WalletScoreResponse } from '@/lib/walletScoreApi';
@@ -12,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { resolveWalletInput } from '@/lib/ens';
 
 type UiState =
   | { status: 'idle' }
@@ -47,6 +47,8 @@ export function WalletScoreChecker() {
   const { address: connectedAddress } = useAccount();
   const [input, setInput] = useState('');
   const [ui, setUi] = useState<UiState>({ status: 'idle' });
+  /** Avoid placeholder SSR/client mismatch (wagmi has no connected address on the server). */
+  const [mounted, setMounted] = useState(false);
 
   const fillPercent = useMemo(() => {
     if (ui.status !== 'success') return 0;
@@ -62,6 +64,8 @@ export function WalletScoreChecker() {
     if (connectedAddress) setInput(connectedAddress);
   }, [connectedAddress]);
 
+  useEffect(() => setMounted(true), []);
+
   /** Autofill when a wallet connects; keep the field if the user already entered a different address. */
   useEffect(() => {
     if (!connectedAddress) return;
@@ -73,25 +77,28 @@ export function WalletScoreChecker() {
     });
   }, [connectedAddress]);
 
-  const addressPlaceholder = connectedAddress
-    ? `${shortenAddress(connectedAddress)} · connected`
-    : '0x… or paste any address';
+  const addressPlaceholder =
+    mounted && connectedAddress
+      ? `${shortenAddress(connectedAddress)} · connected`
+      : '0x… or ENS name (e.g. vitalik.eth)';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed) {
-      setUi({ status: 'error', message: 'Paste a wallet address to run the check.' });
-      return;
-    }
-    if (!isAddress(trimmed)) {
-      setUi({ status: 'error', message: 'That does not look like a valid EVM address.' });
+      setUi({ status: 'error', message: 'Paste a wallet address or ENS name to run the check.' });
       return;
     }
 
     setUi({ status: 'loading' });
     try {
-      const data = await fetchWalletScore(trimmed);
+      const resolved = await resolveWalletInput(trimmed);
+      if (!resolved.ok) {
+        setUi({ status: 'error', message: resolved.message });
+        return;
+      }
+
+      const data = await fetchWalletScore(resolved.address);
       setUi({ status: 'success', data });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong.';
@@ -125,14 +132,14 @@ export function WalletScoreChecker() {
             Wallet credit estimate
           </CardTitle>
           <CardDescription className="max-w-[52ch] text-[0.97rem] leading-relaxed text-muted">
-            A structured read on wallet behaviour and counterparties—akin to a bureau-style score, tuned for Web3. Paste
-            any address; your backend applies AI-assisted scoring over on-chain signals you define.
+            A structured read on wallet behaviour and counterparties—akin to a bureau-style score, tuned for Web3.             Paste
+            any address or an ENS name; your backend applies AI-assisted scoring over on-chain signals you define.
           </CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col gap-8">
           <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-            <Label htmlFor="wallet-address">Wallet address</Label>
+            <Label htmlFor="wallet-address">Wallet address or ENS</Label>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
               <Input
                 id="wallet-address"
@@ -159,8 +166,9 @@ export function WalletScoreChecker() {
                 )}
               </Button>
             </div>
+            {/* Delay wallet-specific UI until after mount so SSR HTML matches first client paint (wagmi). */}
             <AnimatePresence mode="wait">
-              {connectedAddress ? (
+              {mounted && connectedAddress ? (
                 <motion.div key="fill-wallet" {...fadeUp} transition={{ duration: 0.25 }}>
                   <Button type="button" variant="ghost" size="sm" className="h-auto p-0 text-[0.88rem]" onClick={fillFromWallet}>
                     Replace with connected wallet
@@ -239,15 +247,20 @@ export function WalletScoreChecker() {
                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="space-y-3"
                   >
-                    <motion.output
-                      className="block text-5xl font-bold tabular-nums tracking-tight text-foreground md:text-6xl"
-                      aria-live="polite"
-                      initial={{ opacity: 0, scale: 0.92 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                    >
-                      {ui.data.score}
-                    </motion.output>
+                    <div className="flex w-full flex-wrap items-center justify-between gap-x-10 gap-y-3 md:gap-x-14 lg:gap-x-20">
+                      <motion.output
+                        className="shrink-0 text-5xl font-bold tabular-nums tracking-tight text-foreground md:text-6xl"
+                        aria-live="polite"
+                        initial={{ opacity: 0, scale: 0.92 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                      >
+                        {ui.data.score}
+                      </motion.output>
+                      <span className="max-w-[11rem] shrink text-right text-[0.65rem] font-normal leading-snug tracking-normal text-muted/75 sm:max-w-[13rem] md:text-[0.72rem]">
+                        Illustrative mock only—not a precise score; demo uses dummy data.
+                      </span>
+                    </div>
                     <p className="text-base text-muted">{ui.data.tier}</p>
                     {ui.data.highlights && ui.data.highlights.length > 0 ? (
                       <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-muted">
