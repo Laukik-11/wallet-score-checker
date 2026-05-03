@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "screenshots": "node scripts/capture-screenshots.mjs"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",

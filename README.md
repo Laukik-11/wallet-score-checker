@@ -8,8 +8,14 @@ On-chain **wallet trust signal** UI for Ethereum / EVM—paste an address, conne
 - Address paste + validation + score panel (`src/lib/walletScoreApi.ts`: deterministic **mock** scores by default; optional `NEXT_PUBLIC_WALLET_SCORE_API_URL` for a real `/score` POST)
 - Tailwind CSS v3, Radix primitives, Framer Motion
 - **SEO**: metadata, Open Graph & Twitter images, `manifest`, `robots`, `sitemap`, JSON-LD
-- Favicon (`icon.svg`) + generated **Apple touch icon**
+- Favicon: **`public/icon.svg`** (static file—avoids App Router `icon.svg` chunk bugs). Generated **Apple touch icon**
 - **Cover image** for listings (16:9): `public/cover-640x360.png` (640×360). OG/Twitter routes use **1200×675** (same ratio).
+- **Hackathon screenshots** (≥3, **16:9** **1920×1080** PNGs): `public/screenshots/01-home.png`, `02-score-result.png`, `03-docs-concept.png`. Regenerate after UI changes:
+
+```bash
+npx playwright install chromium   # once per machine
+npm run screenshots                # build + prod server + capture
+```
 
 ## Stack
 
@@ -38,3 +44,5 @@ Open [http://localhost:3000](http://localhost:3000) — concept note: [http://lo
 npm run build
 npm start
 ```
+
+If `GET /icon.svg` returns **500** with a missing webpack chunk, delete **`.next`** and restart (`rm -rf .next && npm run dev`).
