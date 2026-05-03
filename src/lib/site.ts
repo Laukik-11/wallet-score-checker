@@ -5,7 +5,7 @@ export const siteConfig = {
   shortName: 'WalletScore',
   titleTemplate: '%s · Wallet Score Checker',
   description:
-    'On-chain wallet trust signal for Ethereum and EVM chains—paste an address, connect a scoring API, and surface AI-assisted counterparty context for Web3 products.',
+    'A CIBIL-inspired trust lens for wallets: explainable scores grounded in verifiable on-chain behaviour—a clearer starting point for counterparty trust, not a promise of creditworthiness.',
   tagline: 'Trust signals for wallets you rely on',
   keywords: [
     'Ethereum',
