@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "screenshots": "node scripts/capture-screenshots.mjs"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.8",
@@ -29,6 +30,7 @@
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "autoprefixer": "^10.4.21",
+    "playwright": "^1.50.1",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
   }
