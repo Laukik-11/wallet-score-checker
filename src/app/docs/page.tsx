@@ -131,7 +131,7 @@ export default function DocsPage() {
           className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent-strong"
         >
           <ArrowLeft className="size-4" aria-hidden />
-          Back to app
+          Back to demo
         </Link>
 
         <header className="mb-14">
@@ -291,7 +291,7 @@ export default function DocsPage() {
             </p>
             <p>
               <Link href="/" className="font-medium text-accent underline-offset-4 hover:underline">
-                Try the app →
+                Try the demo →
               </Link>
             </p>
           </Section>

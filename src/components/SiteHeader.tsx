@@ -19,7 +19,7 @@ export function SiteHeader() {
             href="/"
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground"
           >
-            App
+            Demo
           </Link>
           <span className="text-muted/40 select-none" aria-hidden>
             ·
