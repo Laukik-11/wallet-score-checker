@@ -28,7 +28,7 @@ export function SiteHeader() {
             href="/docs"
             className="rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-accent"
           >
-            Documentation
+            The idea
           </Link>
         </nav>
       </div>

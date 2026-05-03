@@ -1,11 +1,11 @@
 # Wallet Score Checker
 
-On-chain **wallet trust signal** UI for Ethereum / EVM—paste an address, connect with **RainbowKit**, and plug in your AI-assisted scoring API. Built as a polished **hackathon-ready** Next.js app with docs at **`/docs`**.
+On-chain **wallet trust signal** UI for Ethereum / EVM—paste an address, connect with **RainbowKit**, and optionally plug in a scoring API. **`/docs`** explains the **CIBIL-style Web3 concept** (not stack setup).
 
 ## Features
 
 - Wallet connect (RainbowKit · wagmi · viem)
-- Address paste + validation + score panel (backend stub in `src/lib/walletScoreApi.ts`)
+- Address paste + validation + score panel (`src/lib/walletScoreApi.ts`: deterministic **mock** scores by default; optional `NEXT_PUBLIC_WALLET_SCORE_API_URL` for a real `/score` POST)
 - Tailwind CSS v3, Radix primitives, Framer Motion
 - **SEO**: metadata, Open Graph & Twitter images, `manifest`, `robots`, `sitemap`, JSON-LD
 - Favicon (`icon.svg`) + generated **Apple touch icon**
@@ -24,7 +24,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — documentation: [http://localhost:3000/docs](http://localhost:3000/docs).
+Open [http://localhost:3000](http://localhost:3000) — concept note: [http://localhost:3000/docs](http://localhost:3000/docs).
 
 ## Deploy / hackathon
 

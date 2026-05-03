@@ -94,12 +94,7 @@ export function WalletScoreChecker() {
       const data = await fetchWalletScore(trimmed);
       setUi({ status: 'success', data });
     } catch (err) {
-      const message =
-        err instanceof Error && err.message === 'WALLET_SCORE_API_NOT_IMPLEMENTED'
-          ? 'Score API is not connected yet. Implement fetchWalletScore to reach your backend.'
-          : err instanceof Error
-            ? err.message
-            : 'Something went wrong.';
+      const message = err instanceof Error ? err.message : 'Something went wrong.';
       setUi({ status: 'error', message });
     }
   };
