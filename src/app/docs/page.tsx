@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, BarChart3, BookOpen, Scale } from 'lucide-react';
+import { ArrowLeft, BarChart3, BookOpen, Code2, Layers, Rocket, Scale, Workflow } from 'lucide-react';
 import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'The idea',
   description:
-    'Wallet trust scores for Web3—what a “CIBIL for wallets” could mean, why it matters, and how on-chain behaviour might inform it.',
+    'Wallet score summarizes trust from chain history so teams can align on counterparty risk beyond informal reputation.',
   openGraph: {
     title: `The idea · ${siteConfig.name}`,
     description:
-      'Concept note: bureau-style trust signals for Ethereum wallets—not lending advice, but a lens on counterparty behaviour.',
+      'Why a portable wallet score matters for treasury hires and DeFi risk plus how it differs from informal reputation.',
     url: '/docs',
   },
   alternates: { canonical: '/docs' },
@@ -32,6 +32,87 @@ function Section({
         {title}
       </h2>
       <div className="space-y-3 text-[0.97rem] leading-relaxed text-muted">{children}</div>
+    </section>
+  );
+}
+
+const deckBlocks: {
+  id: string;
+  title: string;
+  icon: typeof Layers;
+  bullets: string[];
+}[] = [
+  {
+    id: 'built',
+    title: 'What we built',
+    icon: Layers,
+    bullets: [
+      'Wallet trust “score” UI—a bureau-style lens on Ethereum addresses (CIBIL analogy).',
+      'Paste any address or connect a wallet → band (300–850), tier, short driver lines.',
+      'This page explains the idea; the app proves the interaction loop.',
+      'Demo uses a stable mock scorer today; a real API plugs in via one env URL.',
+    ],
+  },
+  {
+    id: 'works',
+    title: 'How it works',
+    icon: Workflow,
+    bullets: [
+      'Input: checksum-valid EVM address; wallet connect can autofill the field.',
+      'Client asks for a score—deterministic mock locally or POST /score with { address }.',
+      'Output: score, tier, optional highlights—UI shows bar, badge, bullets.',
+      'Framing: counterparty trust preview from behaviour—not loan repayment.',
+    ],
+  },
+  {
+    id: 'made',
+    title: 'How it’s made',
+    icon: Code2,
+    bullets: [
+      'Next.js + React, Tailwind UI, RainbowKit · wagmi · viem for wallets.',
+      'Small Radix-based components + Framer Motion for motion.',
+      'SEO/share: metadata, OG & Twitter images, sitemap, robots, manifest.',
+    ],
+  },
+  {
+    id: 'future',
+    title: 'Future work',
+    icon: Rocket,
+    bullets: [
+      'Real scorer: index txs, protocols, recency, risk lists—weighted, explainable pillars.',
+      'Thin-file caps, published methodology, appeals, versioned models.',
+      'Anti-gaming: sybil/wash detection, monitoring, policy overrides.',
+      'Privacy & consent; plug-ins where scores are one signal among many.',
+    ],
+  },
+];
+
+function DeckGrid() {
+  return (
+    <section id="deck" className="scroll-mt-28" aria-labelledby="deck-heading">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {deckBlocks.map(({ id, title, icon: Icon, bullets }) => (
+          <div
+            key={id}
+            id={`deck-${id}`}
+            className="rounded-2xl border border-border bg-card-muted/35 p-4 backdrop-blur-sm md:p-5"
+          >
+            <div className="mb-3 flex items-center gap-2.5">
+              <span className="inline-flex rounded-lg border border-accent/35 bg-accent/10 p-2 text-accent">
+                <Icon className="size-[18px]" aria-hidden />
+              </span>
+              <h3 className="text-[0.95rem] font-semibold tracking-tight text-foreground">{title}</h3>
+            </div>
+            <ul className="list-disc space-y-1.5 pl-4 text-[0.84rem] leading-snug text-muted marker:text-accent/70">
+              {bullets.map((line) => (
+                <li key={line} className="text-pretty">
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -59,20 +140,35 @@ export default function DocsPage() {
             Concept note
           </div>
           <h1 className="text-balance text-3xl font-semibold tracking-tight text-white md:text-[2.15rem]">
-            A CIBIL-style signal—for wallets, not bank accounts
+            CIBIL style trust for wallets
           </h1>
-          <p className="mt-3 max-w-[62ch] text-lg text-muted">
-            In India, <strong className="font-medium text-foreground">CIBIL</strong> and similar bureaus summarize repayment
-            history so lenders share a common view of creditworthiness. Public blockchains don&apos;t have payslips or EMI
-            tapes—but they do have <strong className="font-medium text-foreground">years of verifiable behaviour</strong>{' '}
-            attached to each address. This project is about that analogy: a{' '}
-            <strong className="font-medium text-foreground">single number (and narrative)</strong> that helps people and
-            protocols answer a softer question:{' '}
-            <em className="text-foreground/90">&quot;Given what this wallet has actually done on-chain, how much trust do I start with?&quot;</em>
-          </p>
+          <ul className="mt-4 max-w-[62ch] list-disc space-y-2 pl-5 text-[0.95rem] leading-snug text-muted md:text-[1.02rem] marker:text-accent/65">
+            <li className="text-pretty">
+              <strong className="font-medium text-foreground">Wallet score</strong> is one summary per address:{' '}
+              <strong className="font-medium text-foreground">300–850</strong> band, tier, short driver lines.
+            </li>
+            <li className="text-pretty">
+              Same idea as bureau scores like <strong className="font-medium text-foreground">CIBIL</strong> but inputs are{' '}
+              <strong className="font-medium text-foreground">on-chain behaviour</strong> not payslips or loan files.
+            </li>
+            <li className="text-pretty">
+              Teams keep deciding trust for treasury, contributors, and protocol counterparties.
+            </li>
+            <li className="text-pretty">
+              Informal reputation and private allowlists scale poorly and rarely show why someone passed or failed.
+            </li>
+            <li className="text-pretty">
+              A shared score gives everyone the same starting read from chain history: faster paths for honest wallets, deeper review for risky ones.
+            </li>
+            <li className="text-pretty">
+              One input among many. Not a final verdict on a person or a promise to repay debt.
+            </li>
+          </ul>
         </header>
 
         <div className="flex flex-col gap-14">
+          <DeckGrid />
+
           <Section id="why-it-matters" title="Why Web3 wants something like this">
             <p>
               Today, teams rely on <strong className="font-medium text-foreground">allowlists</strong>, Discord reputations,
@@ -85,138 +181,103 @@ export default function DocsPage() {
             </p>
           </Section>
 
-          <Section id="tradfi-vs-chain" title="What transfers from TradFi—and what doesn&apos;t">
-            <div className="flex items-start gap-3 rounded-2xl border border-border bg-card-muted/40 p-4 backdrop-blur-sm">
-              <BookOpen className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden />
-              <div className="space-y-3">
-                <p>
-                  <strong className="text-foreground">Similar:</strong> a bounded score band (often{' '}
-                  <strong className="font-medium text-foreground">300–850</strong>-style), tiers (strong / stable / weak),
-                  and short <strong className="font-medium text-foreground">reason lines</strong> so the output is discussable,
-                  not just a black box.
-                </p>
-                <p>
-                  <strong className="text-foreground">Different:</strong> there is no employer or bank reconciling your ledger.
-                  Signals come from <strong className="font-medium text-foreground">transactions, counterparties, protocols,
-                  timing, and optionally attestations</strong> (e.g. ENS, credentials). Privacy and pseudonymity mean any real
-                  product must be careful about <strong className="font-medium text-foreground">what is inferred vs. proven</strong>{' '}
-                  and what users consent to share.
-                </p>
-              </div>
-            </div>
-          </Section>
-
           <Section id="signals" title="What typically feeds such a score">
             <div className="flex items-start gap-3 rounded-2xl border border-accent/25 bg-accent/8 p-4 text-[0.93rem] leading-relaxed">
               <BarChart3 className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden />
-              <p className="text-foreground/95">
-                The interactive demo on the home page shows{' '}
-                <strong className="text-foreground">illustrative numbers</strong> so anyone can feel the UX. A serious scorer
-                behind it would ingest chain data (and possibly ML) along lines like the pillars below—not every project needs
-                all of them.
-              </p>
+              <div className="space-y-2 text-foreground/95">
+                <p>
+                  A scorer turns <strong className="text-foreground">public ledger facts</strong> into a few{' '}
+                  <strong className="text-foreground">pillars</strong>, scores each pillar, then{' '}
+                  <strong className="text-foreground">combines</strong> them into one band (e.g.{' '}
+                  <strong className="text-foreground">300–850</strong>) plus short <strong className="text-foreground">reason lines</strong>.
+                  The home demo uses <strong className="text-foreground">placeholder math</strong>; a production model would follow
+                  the same shape—just backed by real ingestion rules.
+                </p>
+                <p className="text-muted">
+                  Nothing here is mandatory: pick pillars and weights to match your risk policy.
+                </p>
+              </div>
             </div>
 
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Activity &amp; throughput</h3>
-            <p>
-              How often does the wallet transact, over what windows (30 / 90 / 365 days), and is usage{' '}
-              <strong className="font-medium text-foreground">steady</strong> versus one suspicious burst? Low activity
-              doesn&apos;t mean “bad,” but it limits how confident you can be—similar to thin credit files in TradFi.
-            </p>
-
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Breadth across protocols</h3>
-            <p>
-              Does the wallet interact with <strong className="font-medium text-foreground">many meaningful venues</strong>
-              —DEXs, lending, staking, NFT markets, bridges—or only repeat dust interactions? Diversity can signal lived-in
-              participation; spam patterns can be discounted.
-            </p>
-
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Recency &amp; continuity</h3>
-            <p>
-              Last-seen activity, long dormancy, sudden reactivation after years of silence—these shape{' '}
-              <strong className="font-medium text-foreground">confidence</strong> and sometimes trigger manual review rather than
-              a numeric tweak alone.
-            </p>
-
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Counterparty &amp; risk hygiene</h3>
-            <p>
-              Heavy weights usually apply to ties to <strong className="font-medium text-foreground">known exploit flows</strong>,{' '}
-              risky routers, or patterns that look like layering—exact lists and rules are policy choices for each issuer,
-              like bureau exclusion lists in TradFi.
-            </p>
-
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Maturity &amp; proxies</h3>
-            <p>
-              <strong className="font-medium text-foreground">Wallet age</strong>, transaction count / nonce, optional links to
-              identity layers (ENS, verifiable credentials): these help separate brand-new throwaways from accounts with a long,
-              observable trail.
-            </p>
-
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Optional: AI over the trail</h3>
-            <p>
-              Models can compress messy histories into anomalies or clusters; for legitimacy and regulation, outputs should
-              still tie back to <strong className="font-medium text-foreground">explainable drivers</strong> where possible—not
-              only a silent embedding.
-            </p>
-
-            <div className="overflow-x-auto rounded-xl border border-border bg-black/35">
-              <table className="w-full min-w-[520px] border-collapse text-left text-[0.88rem]">
+            <div className="overflow-x-auto rounded-xl border border-border bg-black/35 mt-6">
+              <table className="w-full min-w-[540px] border-collapse text-left text-[0.84rem] leading-snug">
                 <thead>
-                  <tr className="border-b border-border bg-white/[0.04] text-[0.72rem] font-semibold uppercase tracking-wider text-muted">
-                    <th className="px-4 py-3 font-semibold">Lens</th>
-                    <th className="px-4 py-3 font-semibold">Examples</th>
-                    <th className="px-4 py-3 font-semibold">Intuition</th>
+                  <tr className="border-b border-border bg-white/[0.04] text-[0.7rem] font-semibold uppercase tracking-wider text-muted">
+                    <th className="px-3 py-2.5 font-semibold md:px-4 md:py-3">Pillar</th>
+                    <th className="px-3 py-2.5 font-semibold md:px-4 md:py-3">What we measure (on-chain)</th>
+                    <th className="px-3 py-2.5 font-semibold md:px-4 md:py-3">Why it affects trust</th>
                   </tr>
                 </thead>
                 <tbody className="text-muted">
                   <tr className="border-b border-white/[0.06]">
-                    <td className="px-4 py-3 font-medium text-foreground">More transactions</td>
-                    <td className="px-4 py-3">Counts in rolling windows, failed vs success mix</td>
-                    <td className="px-4 py-3">Richer trail → more statistical confidence (with caps against bots).</td>
+                    <td className="px-3 py-2.5 align-top font-medium text-foreground md:px-4 md:py-3">Activity</td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      How often the wallet sends txs; counts over 30 / 90 / 365 days; failed vs successful txs.
+                    </td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      More history usually means <strong className="font-medium text-foreground">statistical confidence</strong>.
+                      Very little activity isn&apos;t “evil”—it&apos;s a <strong className="font-medium text-foreground">thin file</strong>{' '}
+                      (harder to judge).
+                    </td>
                   </tr>
                   <tr className="border-b border-white/[0.06]">
-                    <td className="px-4 py-3 font-medium text-foreground">More protocols</td>
-                    <td className="px-4 py-3">Distinct apps, category spread, bridge usage</td>
-                    <td className="px-4 py-3">Participation across ecosystems vs single-hop loops.</td>
+                    <td className="px-3 py-2.5 align-top font-medium text-foreground md:px-4 md:py-3">Protocol breadth</td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Distinct contracts/apps touched—DEX, lending, staking, NFT venues, bridges—not just one loop.
+                    </td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Breadth suggests <strong className="font-medium text-foreground">real participation</strong>; repetitive dust or
+                      wash loops can be discounted or penalized.
+                    </td>
                   </tr>
                   <tr className="border-b border-white/[0.06]">
-                    <td className="px-4 py-3 font-medium text-foreground">Activity shape</td>
-                    <td className="px-4 py-3">Regular cadence, dormancy, bursts</td>
-                    <td className="px-4 py-3">Behavioural “credit character,” not just totals.</td>
+                    <td className="px-3 py-2.5 align-top font-medium text-foreground md:px-4 md:py-3">Recency</td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Last-seen time; long gaps; sudden bursts after silence.
+                    </td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Shows whether behaviour is <strong className="font-medium text-foreground">continuous</strong>; odd patterns may
+                      trigger review instead of a tiny score tick.
+                    </td>
                   </tr>
                   <tr className="border-b border-white/[0.06]">
-                    <td className="px-4 py-3 font-medium text-foreground">Risk edges</td>
-                    <td className="px-4 py-3">Exploit-adjacent hops, sanction/policy lists</td>
-                    <td className="px-4 py-3">Hard negatives—often override softer positives.</td>
+                    <td className="px-3 py-2.5 align-top font-medium text-foreground md:px-4 md:py-3">Risk hygiene</td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Counterparties and flows—proximity to known exploits, launder patterns, policy lists you maintain.
+                    </td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Often <strong className="font-medium text-foreground">hard negatives</strong>: they can outweigh many soft positives,
+                      like bureau exclusion logic.
+                    </td>
+                  </tr>
+                  <tr className="border-b border-white/[0.06]">
+                    <td className="px-3 py-2.5 align-top font-medium text-foreground md:px-4 md:py-3">Maturity</td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Wallet age, cumulative txs/nonce; optionally ENS or attestations.
+                    </td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Separates <strong className="font-medium text-foreground">brand-new throwaways</strong> from accounts with a long,
+                      observable trail.
+                    </td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-foreground">Tenure</td>
-                    <td className="px-4 py-3">First-seen block, cumulative usage</td>
-                    <td className="px-4 py-3">Thin-file wallets get bounded scores until history grows.</td>
+                    <td className="px-3 py-2.5 align-top font-medium text-foreground md:px-4 md:py-3">Optional ML</td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Clustering / anomaly flags over the full tx graph—still audited against rules.
+                    </td>
+                    <td className="px-3 py-2.5 align-top md:px-4 md:py-3">
+                      Helps prioritize review; outputs should still map to{' '}
+                      <strong className="font-medium text-foreground">explainable drivers</strong>, not a silent score.
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <h3 className="mt-8 text-base font-semibold tracking-tight text-foreground">Turning pillars into one number</h3>
-            <p>
-              A common approach: score each pillar on a bounded scale, choose{' '}
-              <strong className="font-medium text-foreground">weights</strong> that match your risk appetite, combine, then map
-              into a public band like <strong className="font-medium text-foreground">300–850</strong> with named tiers. Sparse
-              data should <strong className="font-medium text-foreground">cap</strong> how high or low the score can go until
-              enough observations exist—much like bureau handling of thin files.
-            </p>
-          </Section>
-
-          <Section id="limits" title="Limits, gaming, and ethics">
-            <p>
-              On-chain scores can be <strong className="font-medium text-foreground">gamed</strong> (wash volume, sybil
-              clusters). Any serious issuer needs{' '}
-              <strong className="font-medium text-foreground">monitoring, appeals, and versioned methodology</strong>, similar
-              to how bureaus dispute processes evolved. Scores must never be sold as{' '}
-              <strong className="font-medium text-foreground">investment advice</strong> or guaranteed repayment likelihood—only
-              as a <strong className="font-medium text-foreground">risk and trust aid</strong> your lawyers are comfortable
-              with.
+            <p className="mt-5 text-[0.93rem] leading-relaxed text-muted">
+              Each pillar becomes a sub-score; you choose <strong className="font-medium text-foreground">weights</strong>, sum or blend,
+              then <strong className="font-medium text-foreground">cap</strong> outcomes when data is sparse so the headline number never
+              overclaims—same intuition as thin-file handling in credit bureaus.
             </p>
           </Section>
 
