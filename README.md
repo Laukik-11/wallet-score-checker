@@ -9,6 +9,7 @@ On-chain **wallet trust signal** UI for Ethereum / EVM—paste an address, conne
 - Tailwind CSS v3, Radix primitives, Framer Motion
 - **SEO**: metadata, Open Graph & Twitter images, `manifest`, `robots`, `sitemap`, JSON-LD
 - Favicon (`icon.svg`) + generated **Apple touch icon**
+- **Cover image** for listings (16:9): `public/cover-640x360.png` (640×360). OG/Twitter routes use **1200×675** (same ratio).
 
 ## Stack
 
