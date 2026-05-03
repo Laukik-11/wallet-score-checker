@@ -28,10 +28,10 @@ function Section({
 }) {
   return (
     <section id={id} className="scroll-mt-28">
-      <h2 className="mb-4 border-b border-white/[0.08] pb-2 text-xl font-semibold tracking-tight text-foreground">
+      <h2 className="mb-4 border-b border-white/[0.08] pb-2 text-2xl font-semibold tracking-tight text-foreground">
         {title}
       </h2>
-      <div className="space-y-3 text-[0.97rem] leading-relaxed text-muted">{children}</div>
+      <div className="space-y-3 text-[1.05rem] leading-relaxed text-muted">{children}</div>
     </section>
   );
 }
@@ -47,10 +47,9 @@ const deckBlocks: {
     title: 'What we built',
     icon: Layers,
     bullets: [
-      'Wallet trust “score” UI—a bureau-style lens on Ethereum addresses (CIBIL analogy).',
-      'Paste any address or connect a wallet → band (300–850), tier, short driver lines.',
-      'This page explains the idea; the app proves the interaction loop.',
-      'Demo uses a stable mock scorer today; a real API plugs in via one env URL.',
+      'UI for a bureau style trust read on an Ethereum address.',
+      'Paste or connect wallet band tier driver bullets.',
+      'Docs plus demo prove the loop.',
     ],
   },
   {
@@ -58,10 +57,10 @@ const deckBlocks: {
     title: 'How it works',
     icon: Workflow,
     bullets: [
-      'Input: checksum-valid EVM address; wallet connect can autofill the field.',
-      'Client asks for a score—deterministic mock locally or POST /score with { address }.',
-      'Output: score, tier, optional highlights—UI shows bar, badge, bullets.',
-      'Framing: counterparty trust preview from behaviour—not loan repayment.',
+      'Valid EVM address wallet connect can autofill.',
+      'Fetch score with address.',
+      'Returns score tier highlights shown as bar badge list.',
+      'Trust preview from behaviour not loan repayment.',
     ],
   },
   {
@@ -69,9 +68,9 @@ const deckBlocks: {
     title: 'How it’s made',
     icon: Code2,
     bullets: [
-      'Next.js + React, Tailwind UI, RainbowKit · wagmi · viem for wallets.',
-      'Small Radix-based components + Framer Motion for motion.',
-      'SEO/share: metadata, OG & Twitter images, sitemap, robots, manifest.',
+      'Next React Tailwind RainbowKit wagmi viem.',
+      'Radix primitives Framer Motion.',
+      'Metadata OG Twitter sitemap robots manifest.',
     ],
   },
   {
@@ -79,10 +78,10 @@ const deckBlocks: {
     title: 'Future work',
     icon: Rocket,
     bullets: [
-      'Real scorer: index txs, protocols, recency, risk lists—weighted, explainable pillars.',
-      'Thin-file caps, published methodology, appeals, versioned models.',
-      'Anti-gaming: sybil/wash detection, monitoring, policy overrides.',
-      'Privacy & consent; plug-ins where scores are one signal among many.',
+      'Backend indexes txs protocols recency risk weighted pillars.',
+      'Thin file caps published methodology appeals.',
+      'Anti gaming monitoring policy overrides.',
+      'Consent plus integrations where score is one input.',
     ],
   },
 ];
@@ -101,9 +100,9 @@ function DeckGrid() {
               <span className="inline-flex rounded-lg border border-accent/35 bg-accent/10 p-2 text-accent">
                 <Icon className="size-[18px]" aria-hidden />
               </span>
-              <h3 className="text-[0.95rem] font-semibold tracking-tight text-foreground">{title}</h3>
+              <h3 className="text-[1.05rem] font-semibold tracking-tight text-foreground">{title}</h3>
             </div>
-            <ul className="list-disc space-y-1.5 pl-4 text-[0.84rem] leading-snug text-muted marker:text-accent/70">
+            <ul className="list-disc space-y-1.5 pl-4 text-[0.93rem] leading-snug text-muted marker:text-accent/70 md:text-[0.98rem]">
               {bullets.map((line) => (
                 <li key={line} className="text-pretty">
                   {line}
@@ -128,41 +127,29 @@ export default function DocsPage() {
       <article className="relative z-10 mx-auto max-w-[820px] px-5 md:px-6">
         <Link
           href="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-accent-strong"
+          className="mb-8 inline-flex items-center gap-2 text-base font-medium text-accent transition-colors hover:text-accent-strong"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Back to demo
         </Link>
 
         <header className="mb-14">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
             <Scale className="size-3.5" aria-hidden />
             Concept note
           </div>
-          <h1 className="text-balance text-3xl font-semibold tracking-tight text-white md:text-[2.15rem]">
+          <h1 className="text-balance text-[2rem] font-semibold tracking-tight text-white md:text-[2.4rem]">
             CIBIL style trust for wallets
           </h1>
-          <ul className="mt-4 max-w-[62ch] list-disc space-y-2 pl-5 text-[0.95rem] leading-snug text-muted md:text-[1.02rem] marker:text-accent/65">
+          <ul className="mt-4 max-w-[58ch] list-disc space-y-2 pl-5 text-[1rem] leading-snug text-muted md:text-[1.06rem] marker:text-accent/65">
             <li className="text-pretty">
-              <strong className="font-medium text-foreground">Wallet score</strong> is one summary per address:{' '}
-              <strong className="font-medium text-foreground">300–850</strong> band, tier, short driver lines.
+              One summary per address: <strong className="font-medium text-foreground">300–850</strong>, tier, driver lines.
             </li>
-            <li className="text-pretty">
-              Same idea as bureau scores like <strong className="font-medium text-foreground">CIBIL</strong> but inputs are{' '}
-              <strong className="font-medium text-foreground">on-chain behaviour</strong> not payslips or loan files.
-            </li>
-            <li className="text-pretty">
-              Teams keep deciding trust for treasury, contributors, and protocol counterparties.
-            </li>
-            <li className="text-pretty">
-              Informal reputation and private allowlists scale poorly and rarely show why someone passed or failed.
-            </li>
-            <li className="text-pretty">
-              A shared score gives everyone the same starting read from chain history: faster paths for honest wallets, deeper review for risky ones.
-            </li>
-            <li className="text-pretty">
-              One input among many. Not a final verdict on a person or a promise to repay debt.
-            </li>
+            <li className="text-pretty">Like CIBIL style bureaus but from on-chain behaviour not loan paperwork.</li>
+            <li className="text-pretty">Used when teams judge treasury payouts, hires, protocol counterparties.</li>
+            <li className="text-pretty">Informal reputation and private lists scale poorly and hide why someone passed or failed.</li>
+            <li className="text-pretty">One chain history baseline helps honest wallets move faster and sends risky ones to review.</li>
+            <li className="text-pretty">One signal among many not identity judgement or repayment promise.</li>
           </ul>
         </header>
 
@@ -182,7 +169,7 @@ export default function DocsPage() {
           </Section>
 
           <Section id="signals" title="What typically feeds such a score">
-            <div className="flex items-start gap-3 rounded-2xl border border-accent/25 bg-accent/8 p-4 text-[0.93rem] leading-relaxed">
+            <div className="flex items-start gap-3 rounded-2xl border border-accent/25 bg-accent/8 p-4 text-[1.02rem] leading-relaxed">
               <BarChart3 className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden />
               <div className="space-y-2 text-foreground/95">
                 <p>
@@ -200,9 +187,9 @@ export default function DocsPage() {
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-border bg-black/35 mt-6">
-              <table className="w-full min-w-[540px] border-collapse text-left text-[0.84rem] leading-snug">
+              <table className="w-full min-w-[540px] border-collapse text-left text-[0.92rem] leading-snug md:text-[0.96rem]">
                 <thead>
-                  <tr className="border-b border-border bg-white/[0.04] text-[0.7rem] font-semibold uppercase tracking-wider text-muted">
+                  <tr className="border-b border-border bg-white/[0.04] text-[0.75rem] font-semibold uppercase tracking-wider text-muted md:text-[0.78rem]">
                     <th className="px-3 py-2.5 font-semibold md:px-4 md:py-3">Pillar</th>
                     <th className="px-3 py-2.5 font-semibold md:px-4 md:py-3">What we measure (on-chain)</th>
                     <th className="px-3 py-2.5 font-semibold md:px-4 md:py-3">Why it affects trust</th>
@@ -274,7 +261,7 @@ export default function DocsPage() {
               </table>
             </div>
 
-            <p className="mt-5 text-[0.93rem] leading-relaxed text-muted">
+            <p className="mt-5 text-[1.02rem] leading-relaxed text-muted">
               Each pillar becomes a sub-score; you choose <strong className="font-medium text-foreground">weights</strong>, sum or blend,
               then <strong className="font-medium text-foreground">cap</strong> outcomes when data is sparse so the headline number never
               overclaims—same intuition as thin-file handling in credit bureaus.
@@ -296,7 +283,7 @@ export default function DocsPage() {
             </p>
           </Section>
 
-          <footer className="border-t border-white/[0.08] pt-10 text-center text-sm text-muted">
+          <footer className="border-t border-white/[0.08] pt-10 text-center text-[0.95rem] text-muted md:text-base">
             <p>
               Educational framing only—not financial, legal, or credit advice. Bureau names are used for analogy; this project
               is not affiliated with any credit bureau.

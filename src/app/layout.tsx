@@ -77,7 +77,7 @@ const jsonLd = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-app-gradient min-h-screen font-sans text-[15px] text-foreground antialiased">
+      <body className="bg-app-gradient min-h-screen font-sans text-[16px] text-foreground antialiased">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Web3Provider>
           <SiteHeader />

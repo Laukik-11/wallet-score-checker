@@ -12,12 +12,12 @@ export function SiteHeader() {
           >
             ◈
           </span>
-          <span className="text-[15px] font-semibold tracking-tight text-foreground">{siteConfig.shortName}</span>
+          <span className="text-[16px] font-semibold tracking-tight text-foreground">{siteConfig.shortName}</span>
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2" aria-label="Primary">
           <Link
             href="/"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground"
+            className="rounded-lg px-3 py-2 text-base font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground"
           >
             Demo
           </Link>
@@ -26,7 +26,7 @@ export function SiteHeader() {
           </span>
           <Link
             href="/docs"
-            className="rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-accent"
+            className="rounded-lg px-3 py-2 text-base font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-accent"
           >
             The idea
           </Link>
