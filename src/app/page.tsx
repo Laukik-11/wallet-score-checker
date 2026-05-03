@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden px-5 pb-16 pt-14 md:px-6 md:pb-20 md:pt-14">
+    <main className="bg-app-gradient relative min-h-screen overflow-hidden px-5 pb-16 pt-6 md:px-6 md:pb-20 md:pt-8">
       <div
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:28px_28px] [mask-image:radial-gradient(circle_at_center,black_40%,transparent_100%)]"
         aria-hidden

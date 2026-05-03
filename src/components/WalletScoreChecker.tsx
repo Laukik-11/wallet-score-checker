@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
@@ -33,8 +33,12 @@ function scoreToPercent(score: number): number {
   return Math.min(100, Math.max(0, ((score - SCORE_MIN) / (SCORE_MAX - SCORE_MIN)) * 100));
 }
 
+function shortenAddress(address: string): string {
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
+}
+
 const fadeUp = {
-  initial: { opacity: 0, y: 14 },
+  initial: false as const,
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -8 },
 };
@@ -57,6 +61,21 @@ export function WalletScoreChecker() {
   const fillFromWallet = useCallback(() => {
     if (connectedAddress) setInput(connectedAddress);
   }, [connectedAddress]);
+
+  /** Autofill when a wallet connects; keep the field if the user already entered a different address. */
+  useEffect(() => {
+    if (!connectedAddress) return;
+    setInput((prev) => {
+      const t = prev.trim();
+      if (t === '') return connectedAddress;
+      if (t.toLowerCase() === connectedAddress.toLowerCase()) return connectedAddress;
+      return prev;
+    });
+  }, [connectedAddress]);
+
+  const addressPlaceholder = connectedAddress
+    ? `${shortenAddress(connectedAddress)} · connected`
+    : '0x… or paste any address';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,7 +106,7 @@ export function WalletScoreChecker() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -95,7 +114,7 @@ export function WalletScoreChecker() {
         <CardHeader className="gap-3 pb-6">
           <div className="flex items-center gap-2 text-accent">
             <motion.span
-              initial={{ scale: 0.85, rotate: -8 }}
+              initial={false}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 400, damping: 22 }}
               className="inline-flex rounded-xl border border-accent/35 bg-accent/10 p-2"
@@ -125,7 +144,7 @@ export function WalletScoreChecker() {
                 name="wallet-address"
                 autoComplete="off"
                 spellCheck={false}
-                placeholder="0x…"
+                placeholder={addressPlaceholder}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={ui.status === 'loading'}
@@ -149,7 +168,7 @@ export function WalletScoreChecker() {
               {connectedAddress ? (
                 <motion.div key="fill-wallet" {...fadeUp} transition={{ duration: 0.25 }}>
                   <Button type="button" variant="ghost" size="sm" className="h-auto p-0 text-[0.88rem]" onClick={fillFromWallet}>
-                    Use connected wallet
+                    Replace with connected wallet
                   </Button>
                 </motion.div>
               ) : null}
@@ -181,13 +200,13 @@ export function WalletScoreChecker() {
               </span>
               <AnimatePresence mode="wait">
                 {fillTier ? (
-                  <motion.div key={fillTier} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
+                  <motion.div key={fillTier} initial={false} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
                     <Badge variant="default">{fillTier}</Badge>
                   </motion.div>
                 ) : (
                   <motion.span
                     key="placeholder-badge"
-                    initial={{ opacity: 0 }}
+                    initial={false}
                     animate={{ opacity: 1 }}
                     className="text-xs text-muted/80"
                   >
